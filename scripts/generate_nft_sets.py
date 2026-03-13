@@ -4,7 +4,7 @@ import requests
 from pathlib import Path
 
 # 配置
-BASE_URL = "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geopip/"
+BASE_URL = "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/"
 COUNTRIES = ["cn", "us", "jp", "de", "fr"]  # 根据需要修改
 OUTPUT_DIR = Path("geoip-nft")
 
