@@ -1,0 +1,35 @@
+name: Update GeoIP nftables sets
+
+on:
+  schedule:
+    - cron: '0 2 * * 0'   # 每周日凌晨2点运行
+  workflow_dispatch:       # 允许手动触发
+
+jobs:
+  generate-sets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies (if any)
+        run: pip install requests  # 如果需要下载多个文件，可以用 requests
+
+      - name: Download and convert .list files
+        run: |
+          python scripts/generate_nft_sets.py
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add geoip-nft/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update GeoIP nftables sets [skip ci]"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
